@@ -11,6 +11,8 @@ class ProductsController < ApplicationController
   # GET /products/1
   # GET /products/1.json
   def show
+  
+        
   end
 
   # GET /products/new
@@ -66,6 +68,13 @@ class ProductsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_product
       @product = Product.find(params[:id])
+      rescue ActiveRecord::RecordNotFound
+      unless @product
+        respond_to do |format|
+          format.html { redirect_to products_path, notice: 'Product non-existent.' }
+          format.json { head :no_content }
+        end
+      end 
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

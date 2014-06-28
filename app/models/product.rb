@@ -1,8 +1,11 @@
 class Product < ActiveRecord::Base
-	validates :title, :description, :image_url, :stock, :presence => true
+	default_scope :order => 'title'
+	validates :title, :presence => true, :uniqueness => true
+	validates :description, :presence => true
+	var = /\A\w+(.mpg|.gif|.jpg|.png)+\z/i
+	validates :image_url, format: { with: var}, :presence => true
 	validates :price, :numericality => {:greater_than_or_equal_to => 0.01},
 			:presence => true
-	validates :title, :uniqueness => true
-	validates :stock, :numericality => {:greater_than_or_equal_to => 0}
-	#validates :image_url, format: {}
+	validates :stock, :numericality => {:greater_than_or_equal_to => 0},
+			:presence => true
 end
