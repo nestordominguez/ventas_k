@@ -1,5 +1,6 @@
 VentasK::Application.routes.draw do
   
+  get "store/index"
   resources :line_items
 
   resources :carts
@@ -10,7 +11,7 @@ VentasK::Application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root :to => 'products#index', :as => 'store'
+  root :to => 'store#index', :as => 'store'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

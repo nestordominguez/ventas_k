@@ -1,4 +1,5 @@
 class ProductsController < ApplicationController
+  
   before_action :set_product, only: [:show, :edit, :update, :destroy]
   
 
@@ -28,6 +29,7 @@ class ProductsController < ApplicationController
   # POST /products.json
   def create
     @product = Product.new(product_params)
+    
 
     respond_to do |format| 
         if @product.save 
@@ -69,11 +71,9 @@ class ProductsController < ApplicationController
     def set_product
       @product = Product.find(params[:id])
       rescue ActiveRecord::RecordNotFound
-      unless @product
         respond_to do |format|
-          format.html { redirect_to products_path, notice: 'Product non-existent.' }
+          format.html { redirect_to products_path, notice: "Product non-existent." }
           format.json { head :no_content }
-        end
       end 
     end
 
@@ -81,4 +81,5 @@ class ProductsController < ApplicationController
     def product_params
       params.require(:product).permit(:title, :description, :image_url, :price, :stock)
     end
+    
 end

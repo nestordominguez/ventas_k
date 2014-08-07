@@ -1,5 +1,7 @@
 class LineItemsController < ApplicationController
+  include CurrentCart
   before_action :set_line_item, only: [:show, :edit, :update, :destroy]
+  before_action :set_cart, only: [:create]
 
   # GET /line_items
   # GET /line_items.json
@@ -24,12 +26,16 @@ class LineItemsController < ApplicationController
   # POST /line_items
   # POST /line_items.json
   def create
-    @line_item = LineItem.new(line_item_params)
+    
+    product = Product.find(params[:product_id])
+    @line_item = @cart.add_product(product.id)
 
     respond_to do |format|
       if @line_item.save
-        format.html { redirect_to @line_item, notice: 'Line item was successfully created.' }
+        format.html { redirect_to(@line_item,
+          :notice => 'Line item was successfully created.') }
         format.json { render action: 'show', status: :created, location: @line_item }
+
       else
         format.html { render action: 'new' }
         format.json { render json: @line_item.errors, status: :unprocessable_entity }
@@ -65,6 +71,11 @@ class LineItemsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_line_item
       @line_item = LineItem.find(params[:id])
+      rescue ActiveRecord::RecordNotFound
+        respond_to do |format|
+          format.html { redirect_to products_path, notice: "Product non-existent." }
+          format.json { head :no_content }
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
